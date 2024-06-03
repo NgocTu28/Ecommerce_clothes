@@ -37,10 +37,11 @@ public class Bill_Controller {
         return "sale";
     }
 
-//    public String addBill(@Valid @ModelAttribute("billForm") Bill bill, BindingResult result, Model model) {
-//        if(result.hasErrors()){
-//            model.addAttribute("billForm", new Bill());
-//            model.addAttribute("actionFormBill", "/api/bill/save");
-//        }
-//    }
+    public String addBill(@Valid @ModelAttribute("billForm") Bill bill, BindingResult result, Model model) {
+        if(result.hasErrors()){
+            model.addAttribute("billForm", new Bill());
+            model.addAttribute("actionFormBill", "/api/bill/save");
+        }
+        return "addbill";
+    }
 }
