@@ -15,4 +15,7 @@ public interface Bill_Repository extends JpaRepository<Bill, Integer> {
 
     @Query(value = "SELECT b FROM Bill b WHERE b.user.name_User like :keyWord")
     Bill findBillByUser(@Param("keyWord") String keyWord);
+
+    @Query(value = "SELECT b FROM Bill b WHERE b.status = 1")
+    List<Bill> getBillActive();
 }

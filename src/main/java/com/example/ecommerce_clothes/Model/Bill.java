@@ -19,6 +19,8 @@ public class Bill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "Code_Bill")
+    private String code_Bill;
     @Column(name = "DateOfPurchase_Bill")
     private LocalDate dateOfPurchase;
     @Column(name = "Status")

@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface Bill_Service {
     List<Bill> findAll();
+    List<Bill> findAllBillActive();
     Optional<Bill> findById(Integer id);
     Bill save(Bill bill) throws ChangeSetPersister.NotFoundException;
     void update(Integer id, Bill bill) throws ChangeSetPersister.NotFoundException;

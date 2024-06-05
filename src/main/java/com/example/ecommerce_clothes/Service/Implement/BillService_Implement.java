@@ -24,6 +24,11 @@ public class BillService_Implement implements Bill_Service {
     }
 
     @Override
+    public List<Bill> findAllBillActive() {
+        return billRepository.getBillActive();
+    }
+
+    @Override
     public Optional<Bill> findById(Integer id) {
         return billRepository.findById(id);
     }
@@ -38,6 +43,7 @@ public class BillService_Implement implements Bill_Service {
         Bill billFind = billRepository.findById(id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
 
         if (billFind != null && billFind.getStatus() != 0) {
+            billFind.setCode_Bill(bill.getCode_Bill());
             billFind.setUser(bill.getUser());
             billFind.setEmployee(bill.getEmployee());
             billFind.setStatus(bill.getStatus());
@@ -56,6 +62,7 @@ public class BillService_Implement implements Bill_Service {
         Bill billFind = billRepository.findById(id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         if (billFind != null) {
             billFind.setStatus(0);
+            billRepository.save(billFind);
         }
     }
 }

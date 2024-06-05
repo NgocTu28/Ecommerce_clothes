@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Thanh Toán</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -9,23 +18,7 @@
           content="admin, estimates, bootstrap, business, corporate, creative, invoice, html5, responsive, Projects">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
-    <title>Dreams Pos admin template</title>
-    <script>
-        function changeQuantity(button, change) {
-            // Find the row containing the button
-            var row = button.closest('tr');
-            // Find the cell that contains the quantity span (assuming it's the 7th cell in the row)
-            var quantitySpan = row.querySelector('#quantity');
-            // Get the current quantity
-            var currentQuantity = parseInt(quantitySpan.textContent);
-            // Calculate the new quantity
-            var newQuantity = currentQuantity + change;
-            // Ensure the quantity does not go below 0
-            if (newQuantity >= 0) {
-                quantitySpan.textContent = newQuantity;
-            }
-        }
-    </script>
+    <title>Clothes</title>
 
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon.jpg}">
     <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
@@ -35,17 +28,18 @@
     <link rel="stylesheet" th:href="@{/assets/plugins/fontawesome/css/fontawesome.min.css}">
     <link rel="stylesheet" th:href="@{/assets/plugins/fontawesome/css/all.min.css}">
     <link rel="stylesheet" th:href="@{/assets/css/style.css}">
-
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap-datetimepicker.min.css}">
     <script th:src="@{/assets/js/jquery-3.6.0.min.js}"></script>
     <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
     <script th:src="@{/assets/js/dataTables.bootstrap4.min.js}"></script>
     <script th:src="@{/assets/plugins/select2/js/select2.min.js}"></script>
     <script th:src="@{/assets/js/script.js}"></script>
+
 </head>
 <body>
 <div id="global-loader">
-    <div class="whirly-loader"> </div>
+    <div class="whirly-loader"></div>
 </div>
 
 <div class="main-wrapper">
@@ -63,14 +57,6 @@
             </a>
         </div>
 
-        <a id="mobile_btn" class="mobile_btn" href="#sidebar">
-                    <span class="bar-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-        </a>
-
         <ul class="nav user-menu">
 
             <li class="nav-item">
@@ -81,17 +67,11 @@
                     </a>
                     <form action="#">
                         <div class="searchinputs">
-                            <input type="text"
-                                   placeholder="Search Here ...">
-                            <div class="search-addon">
-                                        <span><img
-                                                src="/assets/img/icons/closes.svg"
-                                                alt="img"></span>
+                            <input type="text" placeholder="Search Here ...">
+                            <div class="search-addon"><span><img src="/assets/img/icons/closes.svg" alt="img"></span>
                             </div>
                         </div>
-                        <a class="btn" id="searchdiv"><img
-                                src="/assets/img/icons/search.svg"
-                                alt="img"></a>
+                        <a class="btn" id="searchdiv"><img src="/assets/img/icons/search.svg" alt="img"></a>
                     </form>
                 </div>
             </li>
@@ -162,101 +142,202 @@
                                 alt="img"><span> Product</span> <span
                                 class="menu-arrow"></span></a>
                         <ul>
-                            <li><a href="/api/size">
-                                Size List</a></li>
+                            <li><a href="/api/size"
+                            >Product List</a></li>
                             <li><a href="/api/size/add">Add
-                                Size</a></li>
-                            <li><a href="/api/color" class="active">Color
+                                Product</a></li>
+                            <li><a href="/api/color">Color
                                 List</a></li>
                             <li><a href="/api/color/add">Add
                                 Color</a></li>
                             <li><a href="/api/product">Product List</a></li>
-                            <li><a href="/api/product/add">Add Product
-                            <li><a href="brandlist.html">Brand
-                                List</a></li>
-                            <li><a href="addbrand.html">Add
-                                Brand</a></li>
-                            <li><a href="importproduct.html">Import
-                                Products</a></li>
-                            <li><a href="barcode.html">Print
-                                Barcode</a></li>
-                        </ul>
-                    </li>
-                    <li class="submenu">
-                        <a href="javascript:void(0);"><img
-                                src="/assets/img/icons/sales1.svg"
-                                alt="img"><span> Sales</span> <span
-                                class="menu-arrow"></span></a>
-                        <ul>
-                            <li><a href="saleslist.html">Sales
-                                List</a></li>
-                            <li><a href="pos.html">POS</a></li>
-                            <li><a href="pos.html">New Sales</a></li>
-                            <li><a href="salesreturnlists.html">Sales
-                                Return List</a></li>
-                            <li><a href="createsalesreturns.html">New
-                                Sales Return</a></li>
+                            <li><a href="/api/product/add">Add Product</a></li>
+                            <li><a href="/api/product/productdetail/" class="active">Product Detail List</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+
     <div class="page-wrapper">
         <div class="content">
             <div class="page-header">
                 <div class="page-title">
-                    <h4>Quầy Thanh Toán</h4>
-                    <h6></h6>
+                    <h4>Thanh Toán Tại Quầy</h4>
                 </div>
+                <!--                <div class="page-btn">-->
+                <!--                    <a th:href="@{/api/productdetail/add/{id}(id=${product.getId()})}" class="btn btn-added">-->
+                <!--                        <img src="/assets/img/icons/plus.svg" alt="img" class="me-1">Add New ProductDetail-->
+                <!--                    </a>-->
+                <!--                </div>-->
+
             </div>
+            <!--    FORM BILL        -->
             <div class="card">
+                <h5>Hóa Đơn</h5>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Khách Hàng</label>
-                                <div class="row">
-                                    <div class="col-lg-10 col-sm-10 col-10">
-                                        <select class="select" th:feild="*${user}">
-                                            <option>Choose</option>
-                                            <option th:each = "user : ${listUser}" th:value ="${user.id}" th:name="${user.name_User}"></option>
-                                        </select>
+                    <form th:action="@{${actionFormBill}}" th:object="${billForm}" method="post">
+                        <div class="row">
+                            <input type="hidden" th:field="*{id}" readonly/>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Bill Code</label>
+                                    <input type="text" th:field="*{code_Bill}" placeholder="Nhập mã sản phẩm Chi Tiết">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Nhân Viên Thực Hiện Thanh Toán</label>
+                                    <select class="select" th:field="*{employee}">
+                                        <option th:each="e : ${listEmployee}" th:value="${e.id}"
+                                                th:text="${e.name_Employee}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Khách Hàng</label>
+                                    <select class="select" th:field="*{user}">
+                                        <option th:each="u : ${listUser}" th:value="${u.id}"
+                                                th:text="${u.name_User}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Ngày Mua Hàng</label>
+                                    <div class="input-groupicon">
+                                        <input th:field="*{dateOfPurchase}" type="text" class="form-control"
+                                               placeholder="Chọn ngày">
+                                        <a class="addonset">
+                                            <img src="/assets/img/icons/calendars.svg" alt="img">
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
+
                             <div class="form-group">
-                                <label>Ngày Mua Hàng</label>
-                                <div class="input-groupicon">
-                                    <input type="text"
-                                           placeholder="Choose Date"
-                                           class="datetimepicker">
-                                    <a class="addonset">
-                                        <img src="assets/img/icons/calendars.svg" alt="img">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Nhân Viên Thanh Toán</label>
-                                <select class="select" th:field="*${employee}">
-                                    <option>Choose</option>
-                                    <option th:each="employee : ${listEmployee}" th:value="${employee.id}" th:name="${employee.name_Employee}"></option>
+                                <label>Bill Status</label>
+                                <select class="select" th:field="*{status}">
+                                    <option th:value="1">Chờ Thanh Toán</option>
+                                    <option th:value="0">Đã Thanh Toán</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="col-lg-12">
+                            <button type="submit"
+                                    class="btn btn-submit me-2">Lưu Hóa Đơn
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--END FORM BILL-->
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-top">
+                        <div class="search-set">
+                            <div class="search-path">
+                                <a class="btn btn-filter"
+                                   id="filter_search">
+                                    <img src="/assets/img/icons/filter.svg" alt="img">
+                                    <span><img src="/assets/img/icons/closes.svg" alt="img"></span>
+                                </a>
+                            </div>
+                            <div class="search-input">
+                                <a class="btn btn-searchset"><img src="/assets/img/icons/search-white.svg"
+                                                                  alt="img"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table  datanew">
+                            <thead>
+                            <tr>
+                                <th>Mã Hóa Đơn</th>
+                                <th>Nhân Viên Thực Hiện</th>
+                                <th>Khách Hàng</th>
+                                <th>Ngày Mua Hàng</th>
+                                <th>Trạng Thái</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="s : ${listBill}">
+                                <td th:text=" ${s.code_Bill}"></td>
+                                <td th:text=" ${s.getEmployee().name_Employee}"></td>
+                                <td th:text=" ${s.getUser().name_User}"></td>
+                                <td th:text=" ${s.getDateOfPurchase()}"></td>
+                                <td th:text=" ${s.getId()}"></td>
+                                <td th:switch="${s.getStatus()}">
+                                    <span th:case="1">Chờ Thanh Toán</span>
+                                    <span th:case="0">Đã Thanh Toán</span>
+                                <td>
+                                    <a class="me-3" th:href="@{/api/bill/editbill/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/edit.svg}" alt="Edit">
+                                    </a>
+                                    <a class="me-3" th:href="@{/api/bill/delete/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/delete.svg}" alt="Delete">
+                                    </a>
+                                    <a class="me-3" th:href="@{/api/bill/detail/{id}(id=${s.id})}">
+                                        <img th:src="@{/assets/img/icons/dash1.svg}" alt="Detail">
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <h5>Thêm Chi Tiết Hóa Đơn</h5>
+                <div class="card-body">
+                    <form th:action="@{${actionBillDetail}}" method="post" th:object="${billDetailForm}">
+
+                        <label>Hóa Đơn:</label>
+                        <select  th:field="*{bill.id}" required>
+                            <option value="">Chọn sản phẩm</option>
+                            <th:block th:each="bill : ${listBill}">
+                                <option th:value="${bill.id}"
+                                        th:text="${bill.id}"></option>
+                            </th:block>
+                        </select>
+
+                        <label for="productId">Sản Phẩm:</label>
+                        <select id="productId" th:field="*{productDetail.id}" required>
+                            <option value="">Chọn sản phẩm</option>
+                            <th:block th:each="productDetail : ${listProductDetail}">
+                                <option th:value="${productDetail.id}"
+                                        th:text="${productDetail.product.name_Product + productDetail.getSize().name_Size + productDetail.getColor().name_Color}"></option>
+                            </th:block>
+                        </select>
+
+                        <label for="quantity">Số Lượng:</label>
+                        <input type="number" id="quantity" th:field="*{quanlity_BillDetail}" required/>
+
+                        <label for="status">Trạng Thái:</label>
+                        <select id="status" th:field="*{static}" required>
+                            <option value="1">Còn Hàng</option>
+                            <option value="0">Hết Hàng</option>
+                        </select>
+
+                        <button type="submit" class="button">Chi Tiết Hóa Đơn</button>
+                    </form>
+                </div>
+            </div>
+
+            <!--    Bill Detail        -->
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-12 col-sm-6 col-12">
                             <div class="form-group">
-                                <label>Bill Detail</label>
+                                <label>Chi Tiết Hóa Đơn</label>
                             </div>
                         </div>
                     </div>
@@ -265,101 +346,30 @@
                             <table class="table">
                                 <thead>
                                 <tr>
+                                    <th>ID Hóa Đơn</th>
                                     <th>Tên Sản Phẩm</th>
                                     <th>Màu Sắc</th>
                                     <th>Kích Thước</th>
                                     <th>Đơn Giá</th>
                                     <th>Số Lượng Trong Kho</th>
-                                    <th>Giá Sản Phẩm </th>
                                     <th>Số Lượng Mua</th>
+                                    <th>Tổng Tiền</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <td>Product Name</td>
-                                <td>Color</td>
-                                <td>Size</td>
-                                <td>Unit Price</td>
-                                <td>10</td>
-                                <!-- Example stock quantity -->
-                                <td>Product Price</td>
-                                <td>
-                                    <button type="button"
-                                            onclick="changeQuantity(this, -1)">-</button>
-                                    <span id="quantity">1</span>
-                                    <!-- Example initial quantity -->
-                                    <button type="button"
-                                            onclick="changeQuantity(this, 1)">+</button>
-                                </td>
+                                <tr th:each="detail : ${listBillDetail}">
+                                    <td th:text="${detail.bill.id}"></td>
+                                    <td th:text="${detail.productDetail.product.name_Product}"></td>
+                                    <td th:text="${detail.productDetail.color.name_Color}"></td>
+                                    <td th:text="${detail.productDetail.size.name_Size}"></td>
+                                    <td class="unit-price"
+                                        th:text="${detail.productDetail.unitPrice_ProductDetail}"></td>
+                                    <td th:text="${detail.productDetail.quanlity_ProductDetail}"></td>
+                                    <td th:text="${detail.getQuanlity_BillDetail()}"></td>
+                                    <td th:text="${detail.totalAmount_BillDetail}"></td>
+                                </tr>
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Order Tax</label>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Discount</label>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Shipping</label>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="form-group">
-                                <label>Status</label>
-                                <select class="select">
-                                    <option>Choose Status</option>
-                                    <option>Completed</option>
-                                    <option>Inprogress</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 ">
-                                <div
-                                        class="total-order w-100 max-widthauto m-auto mb-4">
-                                    <ul>
-                                        <li>
-                                            <h4>Order Tax</h4>
-                                            <h5>$ 0.00 (0.00%)</h5>
-                                        </li>
-                                        <li>
-                                            <h4>Discount </h4>
-                                            <h5>$ 0.00</h5>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 ">
-                                <div
-                                        class="total-order w-100 max-widthauto m-auto mb-4">
-                                    <ul>
-                                        <li>
-                                            <h4>Shipping</h4>
-                                            <h5>$ 0.00</h5>
-                                        </li>
-                                        <li class="total">
-                                            <h4>Grand Total</h4>
-                                            <h5>$ 0.00</h5>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <a href="javascript:void(0);"
-                               class="btn btn-submit me-2">Submit</a>
-                            <a href="javascript:void(0);"
-                               class="btn btn-cancel">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -367,16 +377,21 @@
         </div>
     </div>
 </div>
-
-    <script th:src="@{/assets/js/jquery-3.6.0.min.js}"></script>
-    <script th:src="@{/assets/js/feather.min.js}"></script>
-    <script th:src="@{/assets/js/jquery.slimscroll.min.js}"></script>
-    <script th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
-    <script th:src="@{/assets/js/dataTables.bootstrap4.min.js}"></script>
-    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/assets/plugins/select2/js/select2.min.js}"></script>
-    <script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
-    <script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
-    <script th:src="@{/assets/js/script.js}"></script>
+<script>
+    $(document).ready(function () {
+        $('#sizeTable').DataTable();
+    });
+</script>
+<script th:src="@{/assets/js/jquery-3.6.0.min.js}"></script>
+<script th:src="@{/assets/js/feather.min.js}"></script>
+<script th:src="@{/assets/js/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/assets/js/dataTables.bootstrap4.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/select2/js/select2.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+<script th:src="@{/assets/js/script.js}"></script>
+<script th:src="@{/assets/js/bootstrap-datetimepicker.min.js}"></script>
 </body>
 </html>
