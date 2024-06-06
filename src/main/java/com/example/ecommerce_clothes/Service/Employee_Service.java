@@ -16,4 +16,5 @@ public interface Employee_Service {
     Employee save(Employee employee) throws ChangeSetPersister.NotFoundException;
     void update(Integer id, Employee employee) throws ChangeSetPersister.NotFoundException;
     void removeOrRever(Integer id) throws ChangeSetPersister.NotFoundException;
+    Employee login( String username, String password);
 }

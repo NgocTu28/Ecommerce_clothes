@@ -35,7 +35,15 @@ public class BillDetailService_Implement implements BillDetail_Service {
 
     @Override
     public BillDetail save(BillDetail billDetail) throws ChangeSetPersister.NotFoundException {
-        ProductDetail productDetail = productDetailRepository.findById(billDetail.getProductDetail().getId()).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        ProductDetail productDetail = productDetailRepository.findById(billDetail.getProductDetail().getId())
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        if (productDetail.getQuanlity_ProductDetail() < billDetail.getQuanlity_BillDetail()) {
+            return null;
+        } else {
+            productDetail.setQuanlity_ProductDetail(productDetail.getQuanlity_ProductDetail() - billDetail.getQuanlity_BillDetail());
+            productDetailRepository.save(productDetail);
+        }
+
         BigDecimal total = productDetail.getUnitPrice_ProductDetail().multiply(BigDecimal.valueOf(billDetail.getQuanlity_BillDetail()));
         billDetail.setTotalAmount_BillDetail(total);
         return billDetailRepository.save(billDetail);
@@ -43,25 +51,44 @@ public class BillDetailService_Implement implements BillDetail_Service {
 
     @Override
     public void update(Integer id, BillDetail billDetailDto) throws ChangeSetPersister.NotFoundException {
-        BillDetail billDetailFind = billDetailRepository.findById(id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-        if(billDetailFind != null && billDetailFind.getStatic() != 0){
-            if(billDetailDto.getQuanlity_BillDetail() > 0){
-                billDetailFind.setProductDetail(billDetailDto.getProductDetail());
-                if(billDetailDto.getQuanlity_BillDetail() > 0){
-                    billDetailFind.setQuanlity_BillDetail(billDetailDto.getQuanlity_BillDetail());
-                }
-                billDetailFind.setStatic(billDetailDto.getStatic());
-                ProductDetail productDetail = productDetailRepository.findById(billDetailDto.getProductDetail().getId()).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-                BigDecimal total = productDetail.getUnitPrice_ProductDetail().multiply(BigDecimal.valueOf(billDetailDto.getQuanlity_BillDetail()));
-                billDetailDto.setTotalAmount_BillDetail(total);
-            }
+        BillDetail billDetailFind = billDetailRepository.findById(id)
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        ProductDetail productDetail = productDetailRepository.findById(billDetailDto.getProductDetail().getId())
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+
+        // Restore the previous quantity to the product's inventory
+        ProductDetail previousProductDetail = billDetailFind.getProductDetail();
+        if (previousProductDetail != null) {
+            previousProductDetail.setQuanlity_ProductDetail(previousProductDetail.getQuanlity_ProductDetail() + billDetailFind.getQuanlity_BillDetail());
+            productDetailRepository.save(previousProductDetail);
         }
+
+        if (productDetail.getQuanlity_ProductDetail() < billDetailDto.getQuanlity_BillDetail()) {
+            System.out.println("Không thể thực hiện UPDATE");
+            return;
+        }
+
+        // Update the product's quantity in the inventory
+        productDetail.setQuanlity_ProductDetail(productDetail.getQuanlity_ProductDetail() - billDetailDto.getQuanlity_BillDetail());
+        productDetailRepository.save(productDetail);
+
+        // Update bill details
+        billDetailFind.setProductDetail(billDetailDto.getProductDetail());
+        billDetailFind.setQuanlity_BillDetail(billDetailDto.getQuanlity_BillDetail());
+        billDetailFind.setStatic(billDetailDto.getStatic());
+
+        // Recalculate the total amount
+        BigDecimal total = productDetail.getUnitPrice_ProductDetail().multiply(BigDecimal.valueOf(billDetailDto.getQuanlity_BillDetail()));
+        billDetailFind.setTotalAmount_BillDetail(total);
+
+        billDetailRepository.save(billDetailFind);
     }
+
 
     @Override
     public void removeOrRever(Integer id) throws ChangeSetPersister.NotFoundException {
         BillDetail billDetailFind = billDetailRepository.findById(id).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
-        if(billDetailFind != null){
+        if (billDetailFind != null) {
             billDetailFind.setStatic(0);
         }
     }

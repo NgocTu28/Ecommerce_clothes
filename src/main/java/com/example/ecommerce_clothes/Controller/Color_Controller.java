@@ -2,6 +2,7 @@ package com.example.ecommerce_clothes.Controller;
 
 import com.example.ecommerce_clothes.Model.Color;
 import com.example.ecommerce_clothes.Service.Color_Service;
+import com.example.ecommerce_clothes.util.SessionUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
@@ -17,12 +18,15 @@ import java.util.Optional;
 @AllArgsConstructor
 public class Color_Controller {
     private final Color_Service colorService;
-
+    private final SessionUtil session;
     @GetMapping("")
     public String viewList(Model model,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "5") int size,
                            @RequestParam(defaultValue = "") String keyword) {
+        if (session.get() == null) {
+            return "redirect:/api/login";
+        }
         model.addAttribute("list", colorService.findAll());
         return "colorlist";
     }

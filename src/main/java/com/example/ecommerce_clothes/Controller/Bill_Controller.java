@@ -2,6 +2,7 @@ package com.example.ecommerce_clothes.Controller;
 
 import com.example.ecommerce_clothes.Model.Bill;
 import com.example.ecommerce_clothes.Model.BillDetail;
+import com.example.ecommerce_clothes.Repository.BillDetail_Repository;
 import com.example.ecommerce_clothes.Service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -9,10 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-
-import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/bill")
@@ -23,6 +22,7 @@ public class Bill_Controller {
     private final ProductDetail_Service productDetailService;
     private final Employee_Service employeeService;
     private final User_Service userService;
+    private final BillDetail_Repository billDetailRepository;
     private final Product_Service productService;
 
     @GetMapping("")
@@ -33,6 +33,8 @@ public class Bill_Controller {
         model.addAttribute("billForm", new Bill());
         model.addAttribute("billDetailForm", new BillDetail());
         model.addAttribute("actionFormBill", "/api/bill/savebill");
+        model.addAttribute("actionBillDetail", "/api/bill/billdetail/save");
+
         return "sale";
     }
 
@@ -54,6 +56,8 @@ public class Bill_Controller {
         model.addAttribute("listEmployee", employeeService.findAll());
         model.addAttribute("listUser", userService.findAll());
         model.addAttribute("listBill", billService.findAllBillActive());
+        model.addAttribute("actionBillDetail", "/api/bill/billdetail/save");
+        model.addAttribute("billDetailForm", new BillDetail());
         Bill bill = billService.findById(idBill).orElseThrow(() -> new ChangeSetPersister.NotFoundException());
         return "sale";
     }
@@ -97,13 +101,17 @@ public class Bill_Controller {
         }
         model.addAttribute("actionBillDetail", "/api/bill/billdetail/save");
         billDetailService.save(billDetail);
-        return "redirect:/api/bill";
+
+        return "redirect:/api/bill/detail/" + billDetail.getBill().getId();
     }
 
     @GetMapping("/detail/edit/{id}")
     public String editViewBillDetail(BillDetail billDetailDto, Model model, @PathVariable("id") Integer idBillDetail, BindingResult bindingResult) throws ChangeSetPersister.NotFoundException {
+        Integer idBill = billDetailRepository.idBillSearchByIdBillDetail(idBillDetail);
         model.addAttribute("billDetailForm", billDetailService.findById(idBillDetail));
-        model.addAttribute("listBill", billService.findAll());
+        model.addAttribute("listBillDetail", billDetailService.findAllByBillId(idBill));
+
+        model.addAttribute("listBill", billService.findAllBillActive());
         model.addAttribute("listEmployee", employeeService.findAll());
         model.addAttribute("listUser", userService.findAll());
         model.addAttribute("listProductDetail", productDetailService.findAll());
@@ -115,6 +123,7 @@ public class Bill_Controller {
 
     @PostMapping("/detail/edit/{id}")
     public String editBillDetail(BillDetail billDetailDto, Model model, @PathVariable("id") Integer idBillDetail, BindingResult bindingResult) throws ChangeSetPersister.NotFoundException {
+        Integer idBill = billDetailRepository.idBillSearchByIdBillDetail(idBillDetail);
         if (bindingResult.hasErrors()) {
             return "redirect:/api/bill";
         }
@@ -122,6 +131,31 @@ public class Bill_Controller {
         if (billDetail.getStatic() != 0 && billDetail != null) {
             billDetailService.update(idBillDetail, billDetailDto);
         }
+        return "redirect:/api/bill/detail/"+idBill;
+    }
+    @PostMapping("/detail/pay/{id}")
+    public String payBill(Model model, @PathVariable("id") Integer idBill) throws ChangeSetPersister.NotFoundException {
+        System.out.println(idBill);
+        Optional<Bill> billFind = billService.findById(idBill);
+
+        if (!billFind.isPresent()) {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+
+        Bill billSet = billFind.get();
+        billSet.setStatus(0);
+        billService.save(billSet);
+
+        // Lấy danh sách hóa đơn và các thông tin khác để hiển thị lại
+        model.addAttribute("listBill", billService.findAllBillActive());
+        model.addAttribute("listEmployee", employeeService.findAll());
+        model.addAttribute("listUser", userService.findAll());
+        model.addAttribute("billForm", new Bill());
+        model.addAttribute("billDetailForm", new BillDetail());
+        model.addAttribute("actionFormBill", "/api/bill/savebill");
+        model.addAttribute("actionBillDetail", "/api/bill/billdetail/save");
+
+        // Chuyển hướng người dùng đến trang danh sách hóa đơn
         return "redirect:/api/bill";
     }
 

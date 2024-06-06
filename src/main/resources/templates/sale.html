@@ -35,6 +35,21 @@
     <script th:src="@{/assets/js/dataTables.bootstrap4.min.js}"></script>
     <script th:src="@{/assets/plugins/select2/js/select2.min.js}"></script>
     <script th:src="@{/assets/js/script.js}"></script>
+    <script>
+        // Hàm tính tổng số tiền hóa đơn chi tiết
+        function calculateTotalBillAmount() {
+            let total = 0;
+            document.querySelectorAll('td[th\\:text="${detail.totalAmount_BillDetail}"]').forEach(function (td) {
+                total += parseFloat(td.textContent || 0);
+            });
+            document.getElementById('totalBillAmount').value = total.toFixed(2);
+        }
+
+        // Gọi hàm tính tổng số tiền khi trang được tải
+        document.addEventListener('DOMContentLoaded', function () {
+            calculateTotalBillAmount();
+        });
+    </script>
 
 </head>
 <body>
@@ -43,93 +58,6 @@
 </div>
 
 <div class="main-wrapper">
-
-    <div class="header">
-
-        <div class="header-left active">
-            <a href="" class="logo">
-                <img src="/assets/img/logo.png" alt>
-            </a>
-            <a href="" class="logo-small">
-                <img src="/assets/img/logo-small.png" alt>
-            </a>
-            <a id="toggle_btn" href="javascript:void(0);">
-            </a>
-        </div>
-
-        <ul class="nav user-menu">
-
-            <li class="nav-item">
-                <div class="top-nav-search">
-                    <a href="javascript:void(0);"
-                       class="responsive-search">
-                        <i class="fa fa-search"></i>
-                    </a>
-                    <form action="#">
-                        <div class="searchinputs">
-                            <input type="text" placeholder="Search Here ...">
-                            <div class="search-addon"><span><img src="/assets/img/icons/closes.svg" alt="img"></span>
-                            </div>
-                        </div>
-                        <a class="btn" id="searchdiv"><img src="/assets/img/icons/search.svg" alt="img"></a>
-                    </form>
-                </div>
-            </li>
-
-
-            <li class="nav-item dropdown has-arrow main-drop">
-                <a href="javascript:void(0);"
-                   class="dropdown-toggle nav-link userset"
-                   data-bs-toggle="dropdown">
-                            <span class="user-img"><img
-                                    src="/assets/img/profiles/avator1.jpg" alt>
-                                <span class="status online"></span></span>
-                </a>
-                <div class="dropdown-menu menu-drop-user">
-                    <div class="profilename">
-                        <div class="profileset">
-                                    <span class="user-img"><img
-                                            src="/assets/img/profiles/avator1.jpg"
-                                            alt>
-                                        <span
-                                                class="status online"></span></span>
-                            <div class="profilesets">
-                                <h6>TÊN NHÂN VIÊN</h6>
-                                <h5>ROLE nhân viên</h5>
-                            </div>
-                        </div>
-                        <hr class="m-0">
-                        <a class="dropdown-item" href="profile.html"> <i
-                                class="me-2" data-feather="user"></i> My
-                            Profile</a>
-                        <a class="dropdown-item"
-                           href="generalsettings.html"><i class="me-2"
-                                                          data-feather="settings"></i>Settings</a>
-                        <hr class="m-0">
-                        <a class="dropdown-item logout pb-0"
-                           href="signin.html"><img
-                                src="/assets/img/icons/log-out.svg"
-                                class="me-2" alt="img">Logout</a>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-        <div class="dropdown mobile-user-menu">
-            <a href="javascript:void(0);"
-               class="nav-link dropdown-toggle"
-               data-bs-toggle="dropdown" aria-expanded="false"><i
-                    class="fa fa-ellipsis-v"></i></a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item" href="profile.html">My
-                    Profile</a>
-                <a class="dropdown-item"
-                   href="generalsettings.html">Settings</a>
-                <a class="dropdown-item" href="signin.html">Logout</a>
-            </div>
-        </div>
-
-    </div>
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-inner slimscroll">
@@ -142,17 +70,17 @@
                                 alt="img"><span> Product</span> <span
                                 class="menu-arrow"></span></a>
                         <ul>
-                            <li><a href="/api/size"
-                            >Product List</a></li>
-                            <li><a href="/api/size/add">Add
-                                Product</a></li>
-                            <li><a href="/api/color">Color
-                                List</a></li>
-                            <li><a href="/api/color/add">Add
-                                Color</a></li>
-                            <li><a href="/api/product">Product List</a></li>
-                            <li><a href="/api/product/add">Add Product</a></li>
-                            <li><a href="/api/product/productdetail/" class="active">Product Detail List</a></li>
+                            <li><a href="/api/size">Kích Thước</a></li>
+                            <li><a href="/api/size/add">Thêm Kích Thước</a></li>
+                            <li><a href="/api/color">Màu Sắc</a></li>
+                            <li><a href="/api/color/add">Thêm Màu Sắc</a></li>
+                            <li><a href="/api/product">Sản Phẩm</a></li>
+                            <li><a href="/api/product/add">Thêm Sản Phẩm</a></li>
+                            <li><a href="/api/employee">Nhân Viên</a></li>
+                            <li><a href="/api/employee/add">Thêm Nhân Viên</a></li>
+                            <li><a href="/api/user">Khách Hàng</a></li>
+                            <li><a href="/api/user/add">Thêm Khách Hàng</a></li>
+                            <li><a href="/api/bill" class="active">Bán Hàng</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -183,7 +111,7 @@
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="form-group">
                                     <label>Bill Code</label>
-                                    <input type="text" th:field="*{code_Bill}" placeholder="Nhập mã sản phẩm Chi Tiết">
+                                    <input type="text" th:field="*{code_Bill}" placeholder="Nhập mã hóa đơn">
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
@@ -216,15 +144,17 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label>Bill Status</label>
-                                <select class="select" th:field="*{status}">
-                                    <option th:value="1">Chờ Thanh Toán</option>
-                                    <option th:value="0">Đã Thanh Toán</option>
-                                </select>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Trạng Thái Hóa Đơn</label>
+                                    <select class="select" th:field="*{status}">
+                                        <option th:value="1" th:text="'Chờ Thanh Toán'" th:selected="${billForm.status == 1}">Chờ Thanh Toán</option>
+                                        <option th:value="0" th:text="'Đã Thanh Toán'" th:selected="${billForm.status == 0}">Đã Thanh Toán</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+
                         <div class="col-lg-12">
                             <button type="submit"
                                     class="btn btn-submit me-2">Lưu Hóa Đơn
@@ -233,6 +163,7 @@
                     </form>
                 </div>
             </div>
+
             <!--END FORM BILL-->
 
 
@@ -298,38 +229,61 @@
                 <h5>Thêm Chi Tiết Hóa Đơn</h5>
                 <div class="card-body">
                     <form th:action="@{${actionBillDetail}}" method="post" th:object="${billDetailForm}">
+                        <div class="row">
+                            <input type="hidden" th:field="*{id}" readonly/>
 
-                        <label>Hóa Đơn:</label>
-                        <select  th:field="*{bill.id}" required>
-                            <option value="">Chọn sản phẩm</option>
-                            <th:block th:each="bill : ${listBill}">
-                                <option th:value="${bill.id}"
-                                        th:text="${bill.id}"></option>
-                            </th:block>
-                        </select>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="billId">Hóa Đơn:</label>
+                                    <select id="billId" class="select" th:field="*{bill.id}" required>
+                                        <option value="">Chọn hóa đơn</option>
+                                        <th:block th:each="bill : ${listBill}">
+                                            <option th:value="${bill.id}" th:text="${bill.user.name_User}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <label for="productId">Sản Phẩm:</label>
-                        <select id="productId" th:field="*{productDetail.id}" required>
-                            <option value="">Chọn sản phẩm</option>
-                            <th:block th:each="productDetail : ${listProductDetail}">
-                                <option th:value="${productDetail.id}"
-                                        th:text="${productDetail.product.name_Product + productDetail.getSize().name_Size + productDetail.getColor().name_Color}"></option>
-                            </th:block>
-                        </select>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="productId">Sản Phẩm:</label>
+                                    <select id="productId" class="select" th:field="*{productDetail.id}" required>
+                                        <option value="">Chọn sản phẩm</option>
+                                        <th:block th:each="productDetail : ${listProductDetail}">
+                                            <option th:value="${productDetail.id}"
+                                                    th:text="${productDetail.product.name_Product} + ${productDetail.size.name_Size} + ${productDetail.color.name_Color}">
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <label for="quantity">Số Lượng:</label>
-                        <input type="number" id="quantity" th:field="*{quanlity_BillDetail}" required/>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="quantity">Số Lượng:</label>
+                                    <input type="number" id="quantity" class="form-control"
+                                           th:field="*{quanlity_BillDetail}" required/>
+                                </div>
+                            </div>
 
-                        <label for="status">Trạng Thái:</label>
-                        <select id="status" th:field="*{static}" required>
-                            <option value="1">Còn Hàng</option>
-                            <option value="0">Hết Hàng</option>
-                        </select>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="status">Trạng Thái:</label>
+                                    <select id="status" class="select" th:field="*{static}" required>
+                                        <option value="1">Còn Hàng</option>
+                                        <option value="0">Hết Hàng</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                        <button type="submit" class="button">Chi Tiết Hóa Đơn</button>
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn btn-submit me-2">Lưu Chi Tiết Hóa Đơn</button>
+                        </div>
                     </form>
                 </div>
             </div>
+
 
             <!--    Bill Detail        -->
             <div class="card">
@@ -343,7 +297,7 @@
                     </div>
                     <div class="row">
                         <div class="table-responsive mb-3">
-                            <table class="table">
+                            <table class="table" id="table">
                                 <thead>
                                 <tr>
                                     <th>ID Hóa Đơn</th>
@@ -354,11 +308,13 @@
                                     <th>Số Lượng Trong Kho</th>
                                     <th>Số Lượng Mua</th>
                                     <th>Tổng Tiền</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="detail : ${listBillDetail}">
-                                    <td th:text="${detail.bill.id}"></td>
+
+                                    <td id="billIdentify" th:text="${detail.bill.id}"></td>
                                     <td th:text="${detail.productDetail.product.name_Product}"></td>
                                     <td th:text="${detail.productDetail.color.name_Color}"></td>
                                     <td th:text="${detail.productDetail.size.name_Size}"></td>
@@ -366,13 +322,94 @@
                                         th:text="${detail.productDetail.unitPrice_ProductDetail}"></td>
                                     <td th:text="${detail.productDetail.quanlity_ProductDetail}"></td>
                                     <td th:text="${detail.getQuanlity_BillDetail()}"></td>
-                                    <td th:text="${detail.totalAmount_BillDetail}"></td>
+                                    <td class="total-amount" th:text="${detail.totalAmount_BillDetail}"></td>
+                                    <td>
+                                        <a class="me-3" th:href="@{/api/bill/detail/edit/{id}(id=${detail.id})}">
+                                            <img th:src="@{/assets/img/icons/edit.svg}" alt="Edit">
+                                        </a>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
+
+                <!-- Payment Button -->
+                <!-- Total Sum -->
+                <div class="row">
+                    <div class="col-lg-12 col-sm-6 col-12">
+                        <label for="totalSum">Tổng Tiền:</label>
+                        <input type="text" id="totalSum" class="form-control" readonly>
+                    </div>
+                </div>
+
+                <form id="paymentForm" action="/api/bill/detail/pay/" method="post">
+                    <input type="hidden" name="id" id="hiddenBillId" value="">
+                    <div class="row mt-3">
+                        <div class="col-lg-12 col-sm-6 col-12">
+                            <button type="submit" class="btn btn-submit">Thanh Toán</button>
+                        </div>
+                    </div>
+                </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        let totalSum = 0;
+                        const totalAmountElements = document.querySelectorAll('.total-amount');
+
+                        totalAmountElements.forEach(function (element) {
+                            totalSum += parseFloat(element.textContent || element.innerText);
+                        });
+
+                        document.getElementById('totalSum').value = totalSum.toFixed(2);
+                    });
+                </script>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const paymentForm = document.getElementById('paymentForm');
+                        const hiddenBillIdInput = document.getElementById('hiddenBillId');
+
+                        // Giả sử idBill nằm trong phần tử có id là 'billIdentify'
+                        const idBill = document.querySelector('#billIdentify').innerHTML;
+
+                        // Đặt giá trị của input ẩn
+                        hiddenBillIdInput.value = idBill;
+
+                        // Bắt sự kiện submit của form
+                        paymentForm.addEventListener('submit', function (event) {
+                            event.preventDefault(); // Ngăn chặn form gửi mặc định
+
+                            // Tạo URL mới bao gồm idBill
+                            const actionUrl = `/api/bill/detail/pay/${idBill}`;
+
+                            // Gửi yêu cầu POST đến server
+                            fetch(actionUrl, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    id: idBill
+                                })
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // Chuyển hướng người dùng đến trang danh sách hóa đơn nếu thành công
+                                        window.location.href = '/api/bill';
+                                    } else {
+                                        // Xử lý lỗi nếu có
+                                        console.error('Failed to process payment');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                    });
+
+                </script>
             </div>
         </div>
     </div>
@@ -380,6 +417,7 @@
 <script>
     $(document).ready(function () {
         $('#sizeTable').DataTable();
+        console.log('tesst', document.querySelector('#billIdentify').innerHTML)
     });
 </script>
 <script th:src="@{/assets/js/jquery-3.6.0.min.js}"></script>
@@ -393,5 +431,8 @@
 <script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
 <script th:src="@{/assets/js/script.js}"></script>
 <script th:src="@{/assets/js/bootstrap-datetimepicker.min.js}"></script>
+<script>
+
+</script>
 </body>
 </html>

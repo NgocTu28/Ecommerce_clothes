@@ -62,4 +62,13 @@ public class EmployeeService_Implement implements Employee_Service {
             employeeRepository.save(employeeFind);
         }
     }
+
+    @Override
+    public Employee login(String username, String password) {
+        Employee employee = employeeRepository.login(username, password);
+        if(employee != null) {
+            return employee;
+        }
+        return null;
+    }
 }

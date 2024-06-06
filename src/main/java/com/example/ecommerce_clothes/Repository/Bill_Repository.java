@@ -18,4 +18,6 @@ public interface Bill_Repository extends JpaRepository<Bill, Integer> {
 
     @Query(value = "SELECT b FROM Bill b WHERE b.status = 1")
     List<Bill> getBillActive();
+
+
 }
